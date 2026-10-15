@@ -1,45 +1,38 @@
-# Ordflätelösaren
+# Ordflätelösaren – GitHub Codespaces
 
-En liten lokal webbapp som:
-- tar emot en pusselbild,
-- försöker läsa bokstäverna med OCR,
-- låter dig rätta OCR-resultatet,
-- söker efter orden med svängar och diagonaler,
-- markerar hittade ord i en bild som kan laddas ned.
+En Streamlit-app som läser ett bokstavsrutnät från en bild, låter dig rätta OCR-resultatet, söker efter ord och markerar dem i en bild.
 
-## Installera
+## Starta i GitHub Codespaces
 
-Kräver Python 3.10 eller senare och Tesseract OCR.
+1. Skapa ett nytt GitHub-repository, till exempel `ordflata-losare`.
+2. Ladda upp alla filer och mappar från det här projektet till repositoryts rot. Se till att `.devcontainer/devcontainer.json` följer med.
+3. På GitHub, öppna repositoryt och välj **Code → Codespaces → Create codespace on main**.
+4. Codespaces bygger miljön och installerar Python-paketen samt Tesseract OCR.
+5. Appen startar automatiskt. När Codespaces frågar om port `8501`, öppna den i webbläsaren. Vanligtvis öppnas fliken automatiskt.
 
-### 1. Installera Tesseract OCR
+## Om appen inte startar automatiskt
 
-- **Windows:** installera Tesseract OCR från dess officiella installationspaket och se till att `tesseract.exe` finns i PATH.
-- **macOS:** `brew install tesseract`
-- **Ubuntu/Debian:** `sudo apt install tesseract-ocr`
-
-Om Tesseract inte känner igen svenska bokstäver med standardinställningarna kan du även installera svenska språkdata. Appen begränsar dock OCR till latinska versaler inklusive ÅÄÖ.
-
-### 2. Installera Python-paketen
-
-Öppna en terminal i mappen och kör:
+Öppna terminalen i Codespaces och kör:
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install --user -r requirements.txt
+streamlit run app.py --server.address 0.0.0.0 --server.port 8501
 ```
 
-### 3. Starta appen
+Använd fliken **Ports** i VS Code och öppna port `8501`.
 
-```bash
-streamlit run app.py
-```
+## Användning
 
-Appen öppnas i webbläsaren. Ladda upp bilden, kontrollera bokstäverna som OCR läst av och klicka på **Hitta och markera ord**.
+1. Ladda upp en PNG-, JPG- eller WEBP-bild.
+2. Välj antal rader och kolumner.
+3. Kontrollera och vid behov rätta bokstäverna som OCR läst av.
+4. Skriv orden ett per rad.
+5. Klicka **Hitta och markera ord**.
+6. Ladda ner resultatbilden.
 
-## Antaganden och begränsningar
+## Begränsningar
 
-- Standardinställningen är 10 rader × 10 kolumner.
-- Appen utgår från att bokstäver får angränsa i åtta riktningar, även diagonalt.
-- Varje ruta får användas högst en gång i samma ord.
-- Den första versionen antar att rutnätet ligger i bildens vänstra 68 %. Om layouten skiljer sig mycket från det, beskära bilden först så att rutnätet ligger till vänster, eller ändra `crop_grid()` i `app.py`.
-- OCR är inte felfri. Granska alltid rutnätet i redigeringsrutan innan sökningen.
-- För svåra pussel med många möjliga vägar kan sökningen ta längre tid; den här versionen är avsedd för vanliga ordflätor.
+- Standardinställningen är 10 × 10 rutor.
+- OCR-beskärningen antar att rutnätet upptar cirka 68 % av bildens bredd till vänster. Om layouten är annorlunda kan du behöva beskära bilden före uppladdning eller justera `crop_grid()` i `app.py`.
+- Ord får gå i åtta riktningar och svänga. En ruta får inte användas två gånger inom samma ord.
+- OCR kan göra misstag; kontrollera alltid rutnätet innan du söker.
